@@ -15,213 +15,169 @@ namespace MALTweet
 {
     public partial class FormMain : Form
     {
-        public TwitterService _Twitter;
-        public TwitterUser _TwitterUser;
+        private MALTweet App;
 
-
-        public bool IsTwitterReady;
-        public bool IsMALReady;
-
-        public int ListHash = 0;
+        const string TOTAL_EPISODES_LABEL = "/  {0}";
+        const string TWEET_COUNTER_LABEL = "Caracteres restantes: {0}";
+        const int TWEET_COUNTER_LIMIT = 140;
 
         public FormMain()
         {
             InitializeComponent();
         }
 
-        private void UpdateMainWindow()
+        private void UpdateStatus()
         {
-            pictureBoxStatusTwitter.Image = IsTwitterReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
-            pictureBoxStaticMAL.Image = IsMALReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
+            pictureBoxStatusMAL.Image = App.MALIsReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
+            pictureBoxStatusTwitter.Image = App.TwitterIsReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
 
-            if (IsMALReady && IsTwitterReady)
+            if (App.Ready)
             {
-                listViewAtualizacoes.Enabled = buttonRecarregarLista.Enabled = true;
-            }
-            else
-            {
-                listViewAtualizacoes.Enabled = buttonRecarregarLista.Enabled = false;
+                listViewMALUpdates.Enabled = true;
+                buttonReloadMALUpdates.Enabled = true;
+                labelTweet.Enabled = true;
+                labelTotalEpisodes.Enabled = true;
+                labelTweetCounter.Enabled = true;
+                textBoxTweet.Enabled = true;
+                buttonSendTweet.Enabled = true;
+                numericUpDownCurrentEpisodes.Enabled = true;
+                textBoxTweet.BackColor = SystemColors.Window;
 
-                Settings.Default.Save();
-            }
-            UpdateList();
-        }
-        private void UpdateList()
-        {
-            WebRequest request = WebRequest.Create("http://myanimelist.net/rss.php?type=rwe&u=" + Settings.Default.MALUser);
+                listViewMALUpdates.Items.Clear();
 
-            listViewAtualizacoes.Items.Clear();
-
-            try
-            {
-                using (WebResponse response = request.GetResponse())
+                foreach (MALEntry entry in App.MALCurrentList)
                 {
-                    XmlDocument xml = new XmlDocument();
-                    xml.Load(response.GetResponseStream());
-
-                    XmlNodeList animes = xml.GetElementsByTagName("item");
-
-                    foreach (XmlNode i in animes)
-                    {
-                        ListViewItem info = new ListViewItem();
-
-                        foreach (XmlNode j in i.ChildNodes)
-                        {
-                            if (j.Name == "title")
-                            {
-                                info.Text = j.InnerText.Trim();
-                                continue;
-                            }
-
-                            if (j.Name == "description")
-                            {
-                                info.SubItems.Add(j.InnerText.Trim());
-                                continue;
-                            }
-                        }
-
-                        listViewAtualizacoes.Items.Add(info);
-                    }
-                    listViewAtualizacoes.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                    listViewMALUpdates.Items.Add(new ListViewItem(new string[] { entry.SeriesTitle, String.Format("{0}/{1}", entry.MyWatchedEpisodes, entry.SeriesEpisodes) }) { Tag = entry });
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ocorreu um erro ao carregar a lista de atualizações.\r\nVerifique se há conexão com a internet e\r\nse o MyAimeList não está passando por problemas tecnicos ou atualizações. Detalhes: {0}", ex.Message);
-            }
-        }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            _Twitter = new TwitterService(Settings.Default.consumerKey, Settings.Default.consumerSecret, Settings.Default.AccessToken, Settings.Default.AccessTokenSecret);
-
-            _TwitterUser = _Twitter.VerifyCredentials();
-            IsTwitterReady = (_TwitterUser.Id != 0);
-            IsMALReady = !String.IsNullOrWhiteSpace(Settings.Default.MALUser);
-
-            toolTipMain.SetToolTip(checkBoxContagem, "Adiciona um ao número de episódios assistidos\r\npara resolver o problema do atraso nas atualizações\r\ndo RSS do MyAnimeList");
-
-            UpdateMainWindow();
-        }
-
-        private void configurarTwitter_Click(object sender, EventArgs e)
-        {
-            FormTwitter t = new FormTwitter(_Twitter, _TwitterUser);
-
-            t.ShowDialog(this);
-
-            _Twitter.AuthenticateWith(Settings.Default.consumerKey, Settings.Default.consumerSecret, Settings.Default.AccessToken, Settings.Default.AccessTokenSecret);
-            _TwitterUser = _Twitter.VerifyCredentials();
-
-            IsTwitterReady = (_TwitterUser.Id != 0);
-            this.UpdateMainWindow();
-        }
-
-        private void configurarMAL_Click(object sender, EventArgs e)
-        {
-            FormMAL m = new FormMAL();
-
-            DialogResult d = m.ShowDialog(this);
-
-            IsMALReady = !String.IsNullOrWhiteSpace(Settings.Default.MALUser);
-
-            this.UpdateMainWindow();
-        }
-
-        private void LimparConfig_Click(object sender, EventArgs e)
-        {
-            DialogResult m = MessageBox.Show("Tem ceteza de que deseja limpar todas as configurações?", "Confirmação", MessageBoxButtons.OKCancel);
-
-            if (m == DialogResult.OK)
-            {
-                Settings.Default.MALUser = "";
-                Settings.Default.PIN = "";
-                Settings.Default.AccessToken = "";
-                Settings.Default.AccessTokenSecret = "";
-
-                _Twitter.AuthenticateWith(Settings.Default.consumerKey, Settings.Default.consumerSecret);
-                _TwitterUser = _Twitter.VerifyCredentials();
-
-                IsMALReady = false;
-                IsTwitterReady = (_TwitterUser.Id != 0);
-                this.UpdateMainWindow();
-            }
-        }
-
-        private void carregar_Click(object sender, EventArgs e)
-        {
-            UpdateList();
-        }
-
-        private void lstUpdates_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            if (listViewAtualizacoes.SelectedItems.Count == 0)
-            {
-                textBoxTweet.Text = "";
-                checkBoxContagem.Enabled = false;
-                buttonEnviar.Enabled = false;
-                textBoxTweet.Enabled = false;
-                textBoxTweet.Clear();
-                return;
-            }
-
-            Regex r = new Regex("(Watching|Rewatching|Dropped|On-Hold|Completed|Plan to Watch) - ([0-9]+?) of ([0-9]+?) episodes", RegexOptions.IgnoreCase);
-
-            GroupCollection t = r.Match(listViewAtualizacoes.SelectedItems[0].SubItems[1].Text).Groups;
-
-            try
-            {
-                string status = t[1].Value;
-                int current = Convert.ToInt32(t[2].Value);
-                int total = Convert.ToInt32(t[3].Value);
-
-                if (checkBoxContagem.Checked && (current < total))
-                    current++;
-
-                if (status == "Dropped")
-                    textBoxTweet.Text = String.Format("Desisti de assistir a {0}", listViewAtualizacoes.SelectedItems[0].Text);
-                else if (current == 1 && total == 1)
-                    textBoxTweet.Text = String.Format("Assisti a {0}", listViewAtualizacoes.SelectedItems[0].Text);
-                else if (current == 1)
-                    textBoxTweet.Text = String.Format("Comecei a assistir a {0} (episódio 1 de {1})", listViewAtualizacoes.SelectedItems[0].Text, total);
-                else if (current == total)
-                    textBoxTweet.Text = String.Format("Terminei de assistir a {0} ({1} episódios)", listViewAtualizacoes.SelectedItems[0].Text, current);
-                else
-                    textBoxTweet.Text = String.Format("Assisti a {0} (episódio {1} de {2})", listViewAtualizacoes.SelectedItems[0].Text, current, total);
-
-                textBoxTweet.Enabled = buttonEnviar.Enabled = checkBoxContagem.Enabled = true;
-            }
-            catch (FormatException Exception)
-            {
-                MessageBox.Show(Exception.Message);
-            }
-        }
-
-        private void btnEnviar_Click(object sender, EventArgs e)
-        {
-            TwitterStatus t = _Twitter.SendTweet(textBoxTweet.Text);
-
-            if (t.Id != 0)
-            {
-                MessageBox.Show("O tweet foi enviado com sucesso!");
-                textBoxTweet.Clear();
+                listViewMALUpdates_SelectedIndexChanged(this, EventArgs.Empty);
             }
             else
-                MessageBox.Show("O ocorreu um erro ao enviar o tweet.");
-
-            //System.Diagnostics.Process.Start("http://twitter.com/{0}",t.Author);
+            {
+                listViewMALUpdates.Enabled = false;
+                listViewMALUpdates.Items.Clear();
+                buttonReloadMALUpdates.Enabled = false;
+                labelTweet.Enabled = false;
+                labelTotalEpisodes.Enabled = false;
+                labelTweetCounter.Enabled = false;
+                textBoxTweet.Enabled = false;
+                textBoxTweet.Text = String.Empty;
+                buttonSendTweet.Enabled = false;
+                numericUpDownCurrentEpisodes.Enabled = false;
+                numericUpDownCurrentEpisodes.Value = 0;
+                textBoxTweet.BackColor = SystemColors.Control;
+            }
         }
 
-        private void txtTweet_TextChanged(object sender, EventArgs e)
+        private void FormMain_Load(object sender, EventArgs e)
         {
-            TextBox t = sender as TextBox;
-            labelContador.Text = String.Format("Caracteres restantes: {0}", t.MaxLength - t.Text.Length);
+            App = new MALTweet();
+
+            UpdateStatus();
         }
 
-        private void cbxIncCount_CheckedChanged(object sender, EventArgs e)
+        private void buttonbuttonResetConfig_Click(object sender, EventArgs e)
         {
-            lstUpdates_SelectedIndexChanged(sender, e);
+            App.ResetTwitter();
+            App.ResetMAL();
+
+            UpdateStatus();
+        }
+
+        private void buttonConfigTwitter_Click(object sender, EventArgs e)
+        {
+            FormTwitter f = new FormTwitter(App);
+
+            if (f.ShowDialog(this) == DialogResult.OK)
+                UpdateStatus();
+        }
+
+        private void buttonConfigMAL_Click(object sender, EventArgs e)
+        {
+            FormMAL f = new FormMAL(App);
+
+            if (f.ShowDialog(this) == DialogResult.OK)
+                UpdateStatus();
+        }
+
+        private void buttonReloadMALUpdates_Click(object sender, EventArgs e)
+        {
+            MALEntryList m = App.MALGetUpdates();
+        }
+
+        private void listViewMALUpdates_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewMALUpdates.SelectedItems.Count == 0)
+            {
+                numericUpDownCurrentEpisodes.Maximum = 0;
+                numericUpDownCurrentEpisodes.Value = 0;
+                numericUpDownCurrentEpisodes.Enabled = false;
+
+                labelTotalEpisodes.Text = String.Empty;
+
+                textBoxTweet.Text = String.Empty;
+                textBoxTweet.Enabled = false;
+                textBoxTweet.BackColor = SystemColors.Control;
+
+                buttonSendTweet.Enabled = false;
+            }
+            else
+            {
+                MALEntry entry = (MALEntry) listViewMALUpdates.SelectedItems[0].Tag;
+
+                numericUpDownCurrentEpisodes.Maximum = entry.SeriesEpisodes;
+                numericUpDownCurrentEpisodes.Value = entry.MyWatchedEpisodes;
+                numericUpDownCurrentEpisodes.Enabled = true;
+
+                labelTotalEpisodes.Text = String.Format(TOTAL_EPISODES_LABEL, entry.SeriesEpisodes);
+
+                textBoxTweet.Text = ComposeTweet(entry, entry.MyWatchedEpisodes);
+                textBoxTweet.Enabled = true;
+                textBoxTweet.BackColor = SystemColors.Window;
+
+                buttonSendTweet.Enabled = true;
+            }
+        }
+
+        private void buttonSendTweet_Click(object sender, EventArgs e)
+        {
+            if (App.SendTweet(textBoxTweet.Text))
+                MessageBox.Show("Sucesso!");
+            else
+                MessageBox.Show("zica monstro, o tweet voltou.");
+        }
+
+        private void textBoxTweet_TextChanged(object sender, EventArgs e)
+        {
+            labelTweetCounter.Text = String.Format(TWEET_COUNTER_LABEL, TWEET_COUNTER_LIMIT - textBoxTweet.TextLength);
+        }
+
+        private void numericUpDownCurrentEpisodes_ValueChanged(object sender, EventArgs e)
+        {
+            if (listViewMALUpdates.SelectedItems.Count != 0)
+            {
+                MALEntry entry = (MALEntry) listViewMALUpdates.SelectedItems[0].Tag;
+                textBoxTweet.Text = ComposeTweet(entry, (int) numericUpDownCurrentEpisodes.Value);
+            }
+        }
+
+        private string ComposeTweet(MALEntry entry, int watched)
+        {
+            if (watched == 0)
+                return String.Format("Comecei a assistir a {0} ({1} episódios) - http://myanimelist.net/anime/{2} #MALTweet", entry.SeriesTitle, entry.SeriesEpisodes, entry.SeriesAnimedbId);
+
+            if (watched == 1)
+            {
+                if (entry.SeriesEpisodes == 1)
+                    return String.Format("Assisti a {0} - http://myanimelist.net/anime/{1} #MALTweet", entry.SeriesTitle, entry.SeriesAnimedbId);
+
+                return String.Format("Comecei a assistir a {0} ({1} episódios) - http://myanimelist.net/anime/{2} #MALTweet", entry.SeriesTitle, entry.SeriesEpisodes, entry.SeriesAnimedbId);
+            }
+
+            if (watched >= entry.SeriesEpisodes)
+                return String.Format("Terminei de assistir a {0} ({1} episódios) - http://myanimelist.net/anime/{2} #MALTweet", entry.SeriesTitle, entry.SeriesEpisodes, entry.SeriesAnimedbId);
+
+            return String.Format("Assisti a {0} ({1} de {2} episódios) - http://myanimelist.net/anime/{3} #MALTweet", entry.SeriesTitle, watched, entry.SeriesEpisodes, entry.SeriesAnimedbId);
         }
     }
 }

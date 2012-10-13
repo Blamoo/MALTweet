@@ -13,79 +13,61 @@ namespace MALTweet
 {
     public partial class FormMAL : Form
     {
-        public FormMAL()
+        private MALTweet App;
+
+        public FormMAL(MALTweet app)
         {
+            App = app;
             InitializeComponent();
         }
 
-        private void btnValidarMALUser_Click(object sender, EventArgs e)
+        private void UpdateStatus()
         {
-            WebRequest request = WebRequest.Create("http://myanimelist.net/malappinfo.php?u=" + textBoxMALUsuario.Text);
-            WebResponse response = request.GetResponse();
-
-            XmlDocument xml = new XmlDocument();
-
-            try
+            if (App.MALIsReady)
             {
-                xml.Load(response.GetResponseStream());
-
-                foreach (XmlNode i in xml.ChildNodes[1])
-                {
-                    if (i.Name == "myinfo")
-                    {
-                        foreach (XmlNode j in i.ChildNodes)
-                        {
-                            if (j.Name == "user_name")
-                            {
-                                textBoxMALUsuario.Text = j.InnerText.Trim();
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                MessageBox.Show("O nome de usuário é válido. Sua conta no MyAnimeList foi configurada corretamente.");
-                groupBoxMAL.Enabled = textBoxMALUsuario.Enabled = buttonValidarMAL.Enabled = false;
-                buttonLimpar.Enabled = true;
-
-                Settings.Default.MALUser = textBoxMALUsuario.Text;
-                Settings.Default.Save();
-            }
-            catch
-            {
-                MessageBox.Show("Nome de usuário inválido");
-                textBoxMALUsuario.Clear();
-                textBoxMALUsuario.Focus();
-            }
-        }
-
-        private void btnLimpar_Click(object sender, EventArgs e)
-        {
-            groupBoxMAL.Enabled = textBoxMALUsuario.Enabled = buttonValidarMAL.Enabled = true;
-            buttonLimpar.Enabled = false;
-            Settings.Default.MALUser = "";
-            Settings.Default.Save();
-        }
-
-        private void btnFechar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MALForm_Load(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(Settings.Default.MALUser))
-            {
-                groupBoxMAL.Enabled = textBoxMALUsuario.Enabled = buttonValidarMAL.Enabled = true;
-                buttonLimpar.Enabled = false;
+                textBoxMALUser.Text = App.MALUser;
+                textBoxMALUser.Enabled = false;
+                buttonValidateMAL.Enabled = false;
+                buttonReset.Enabled = true;
             }
             else
             {
-                textBoxMALUsuario.Text = Settings.Default.MALUser;
-                groupBoxMAL.Enabled = textBoxMALUsuario.Enabled = buttonValidarMAL.Enabled = false;
-                buttonLimpar.Enabled = true;
+                textBoxMALUser.Text = String.Empty;
+                textBoxMALUser.Enabled = true;
+                buttonValidateMAL.Enabled = true;
+                buttonReset.Enabled = false;
             }
+        }
+
+        private void buttonFechar_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+            App.SaveMALConfig();
+            Close();
+        }
+
+        private void FormMAL_Load(object sender, EventArgs e)
+        {
+            UpdateStatus();
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            App.ResetMAL();
+            UpdateStatus();
+        }
+
+        private void buttonValidateMAL_Click(object sender, EventArgs e)
+        {
+            App.SetTestMALUser(textBoxMALUser.Text);
+            App.ValidateMAL();
+
+            if (!App.MALIsReady)
+                MessageBox.Show(App.LastMALError);
+            else
+                MessageBox.Show("Sucesso!");
+
+            UpdateStatus();
         }
     }
 }

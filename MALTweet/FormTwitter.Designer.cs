@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTwitter));
             this.groupBoxTwitter = new System.Windows.Forms.GroupBox();
-            this.buttonValidarPin = new System.Windows.Forms.Button();
-            this.buttonObterPin = new System.Windows.Forms.Button();
+            this.buttonValidatePin = new System.Windows.Forms.Button();
+            this.buttonGetPin = new System.Windows.Forms.Button();
             this.textBoxPin = new System.Windows.Forms.TextBox();
             this.labelPin = new System.Windows.Forms.Label();
-            this.buttonFechar = new System.Windows.Forms.Button();
-            this.buttonLimpar = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonReset = new System.Windows.Forms.Button();
             this.groupBoxTwitter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,8 +43,8 @@
             // 
             this.groupBoxTwitter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTwitter.Controls.Add(this.buttonValidarPin);
-            this.groupBoxTwitter.Controls.Add(this.buttonObterPin);
+            this.groupBoxTwitter.Controls.Add(this.buttonValidatePin);
+            this.groupBoxTwitter.Controls.Add(this.buttonGetPin);
             this.groupBoxTwitter.Controls.Add(this.textBoxPin);
             this.groupBoxTwitter.Controls.Add(this.labelPin);
             this.groupBoxTwitter.Location = new System.Drawing.Point(12, 12);
@@ -54,40 +54,37 @@
             this.groupBoxTwitter.TabStop = false;
             this.groupBoxTwitter.Text = "Configurações do Twitter";
             // 
-            // buttonValidarPin
+            // buttonValidatePin
             // 
-            this.buttonValidarPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonValidarPin.Enabled = false;
-            this.buttonValidarPin.Location = new System.Drawing.Point(199, 61);
-            this.buttonValidarPin.Name = "buttonValidarPin";
-            this.buttonValidarPin.Size = new System.Drawing.Size(75, 23);
-            this.buttonValidarPin.TabIndex = 4;
-            this.buttonValidarPin.Text = "Validar Pin";
-            this.buttonValidarPin.UseVisualStyleBackColor = true;
-            this.buttonValidarPin.Click += new System.EventHandler(this.btnValidarPin_Click);
+            this.buttonValidatePin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonValidatePin.Location = new System.Drawing.Point(199, 61);
+            this.buttonValidatePin.Name = "buttonValidatePin";
+            this.buttonValidatePin.Size = new System.Drawing.Size(75, 23);
+            this.buttonValidatePin.TabIndex = 4;
+            this.buttonValidatePin.Text = "Validar Pin";
+            this.buttonValidatePin.UseVisualStyleBackColor = true;
+            this.buttonValidatePin.Click += new System.EventHandler(this.buttonValidatePin_Click);
             // 
-            // buttonObterPin
+            // buttonGetPin
             // 
-            this.buttonObterPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonObterPin.Location = new System.Drawing.Point(199, 32);
-            this.buttonObterPin.Name = "buttonObterPin";
-            this.buttonObterPin.Size = new System.Drawing.Size(75, 23);
-            this.buttonObterPin.TabIndex = 2;
-            this.buttonObterPin.Text = "Obter Pin";
-            this.buttonObterPin.UseVisualStyleBackColor = true;
-            this.buttonObterPin.Click += new System.EventHandler(this.btnObterPin_Click);
+            this.buttonGetPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGetPin.Location = new System.Drawing.Point(199, 32);
+            this.buttonGetPin.Name = "buttonGetPin";
+            this.buttonGetPin.Size = new System.Drawing.Size(75, 23);
+            this.buttonGetPin.TabIndex = 2;
+            this.buttonGetPin.Text = "Obter Pin";
+            this.buttonGetPin.UseVisualStyleBackColor = true;
+            this.buttonGetPin.Click += new System.EventHandler(this.buttonGetPin_Click);
             // 
             // textBoxPin
             // 
             this.textBoxPin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPin.Enabled = false;
             this.textBoxPin.Location = new System.Drawing.Point(6, 32);
             this.textBoxPin.MaxLength = 7;
             this.textBoxPin.Name = "textBoxPin";
             this.textBoxPin.Size = new System.Drawing.Size(187, 20);
             this.textBoxPin.TabIndex = 1;
-            this.textBoxPin.TextChanged += new System.EventHandler(this.txtPin_TextChanged);
             // 
             // labelPin
             // 
@@ -98,36 +95,35 @@
             this.labelPin.TabIndex = 0;
             this.labelPin.Text = "Pin:";
             // 
-            // buttonFechar
+            // buttonClose
             // 
-            this.buttonFechar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFechar.Location = new System.Drawing.Point(217, 108);
-            this.buttonFechar.Name = "buttonFechar";
-            this.buttonFechar.Size = new System.Drawing.Size(75, 23);
-            this.buttonFechar.TabIndex = 1;
-            this.buttonFechar.Text = "Fechar";
-            this.buttonFechar.UseVisualStyleBackColor = true;
-            this.buttonFechar.Click += new System.EventHandler(this.btnFechar_Click);
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClose.Location = new System.Drawing.Point(217, 108);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.TabIndex = 1;
+            this.buttonClose.Text = "Fechar";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonFechar_Click);
             // 
-            // buttonLimpar
+            // buttonReset
             // 
-            this.buttonLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLimpar.Enabled = false;
-            this.buttonLimpar.Location = new System.Drawing.Point(136, 108);
-            this.buttonLimpar.Name = "buttonLimpar";
-            this.buttonLimpar.Size = new System.Drawing.Size(75, 23);
-            this.buttonLimpar.TabIndex = 3;
-            this.buttonLimpar.Text = "Limpar";
-            this.buttonLimpar.UseVisualStyleBackColor = true;
-            this.buttonLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
+            this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonReset.Location = new System.Drawing.Point(136, 108);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(75, 23);
+            this.buttonReset.TabIndex = 3;
+            this.buttonReset.Text = "Limpar";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonLimpar_Click);
             // 
             // FormTwitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(304, 138);
-            this.Controls.Add(this.buttonLimpar);
-            this.Controls.Add(this.buttonFechar);
+            this.Controls.Add(this.buttonReset);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.groupBoxTwitter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -136,7 +132,7 @@
             this.Name = "FormTwitter";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configurar Twitter";
-            this.Load += new System.EventHandler(this.TwitterForm_Load);
+            this.Load += new System.EventHandler(this.FormTwitter_Load);
             this.groupBoxTwitter.ResumeLayout(false);
             this.groupBoxTwitter.PerformLayout();
             this.ResumeLayout(false);
@@ -147,10 +143,10 @@
 
         private System.Windows.Forms.GroupBox groupBoxTwitter;
         private System.Windows.Forms.Label labelPin;
-        private System.Windows.Forms.Button buttonObterPin;
+        private System.Windows.Forms.Button buttonGetPin;
         private System.Windows.Forms.TextBox textBoxPin;
-        private System.Windows.Forms.Button buttonFechar;
-        private System.Windows.Forms.Button buttonLimpar;
-        private System.Windows.Forms.Button buttonValidarPin;
+        private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.Button buttonValidatePin;
     }
 }

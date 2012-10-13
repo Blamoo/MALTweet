@@ -29,89 +29,89 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMAL));
-            this.buttonLimpar = new System.Windows.Forms.Button();
-            this.buttonFechar = new System.Windows.Forms.Button();
-            this.groupBoxMAL = new System.Windows.Forms.GroupBox();
-            this.buttonValidarMAL = new System.Windows.Forms.Button();
-            this.textBoxMALUsuario = new System.Windows.Forms.TextBox();
-            this.labelUsuarioMAL = new System.Windows.Forms.Label();
-            this.groupBoxMAL.SuspendLayout();
+            this.buttonReset = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.groupBoxMALUser = new System.Windows.Forms.GroupBox();
+            this.buttonValidateMAL = new System.Windows.Forms.Button();
+            this.textBoxMALUser = new System.Windows.Forms.TextBox();
+            this.labelMALUser = new System.Windows.Forms.Label();
+            this.groupBoxMALUser.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonLimpar
+            // buttonReset
             // 
-            this.buttonLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLimpar.Location = new System.Drawing.Point(114, 105);
-            this.buttonLimpar.Name = "buttonLimpar";
-            this.buttonLimpar.Size = new System.Drawing.Size(75, 23);
-            this.buttonLimpar.TabIndex = 7;
-            this.buttonLimpar.Text = "Limpar";
-            this.buttonLimpar.UseVisualStyleBackColor = true;
-            this.buttonLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
+            this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonReset.Location = new System.Drawing.Point(114, 105);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(75, 23);
+            this.buttonReset.TabIndex = 7;
+            this.buttonReset.Text = "Limpar";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
-            // buttonFechar
+            // buttonClose
             // 
-            this.buttonFechar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFechar.Location = new System.Drawing.Point(195, 105);
-            this.buttonFechar.Name = "buttonFechar";
-            this.buttonFechar.Size = new System.Drawing.Size(75, 23);
-            this.buttonFechar.TabIndex = 5;
-            this.buttonFechar.Text = "Fechar";
-            this.buttonFechar.UseVisualStyleBackColor = true;
-            this.buttonFechar.Click += new System.EventHandler(this.btnFechar_Click);
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClose.Location = new System.Drawing.Point(195, 105);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.TabIndex = 5;
+            this.buttonClose.Text = "Fechar";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonFechar_Click);
             // 
-            // groupBoxMAL
+            // groupBoxMALUser
             // 
-            this.groupBoxMAL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxMALUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxMAL.Controls.Add(this.buttonValidarMAL);
-            this.groupBoxMAL.Controls.Add(this.textBoxMALUsuario);
-            this.groupBoxMAL.Controls.Add(this.labelUsuarioMAL);
-            this.groupBoxMAL.Location = new System.Drawing.Point(12, 12);
-            this.groupBoxMAL.Name = "groupBoxMAL";
-            this.groupBoxMAL.Size = new System.Drawing.Size(258, 87);
-            this.groupBoxMAL.TabIndex = 4;
-            this.groupBoxMAL.TabStop = false;
-            this.groupBoxMAL.Text = "Configurações do MyAnimeList";
+            this.groupBoxMALUser.Controls.Add(this.buttonValidateMAL);
+            this.groupBoxMALUser.Controls.Add(this.textBoxMALUser);
+            this.groupBoxMALUser.Controls.Add(this.labelMALUser);
+            this.groupBoxMALUser.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxMALUser.Name = "groupBoxMALUser";
+            this.groupBoxMALUser.Size = new System.Drawing.Size(258, 87);
+            this.groupBoxMALUser.TabIndex = 4;
+            this.groupBoxMALUser.TabStop = false;
+            this.groupBoxMALUser.Text = "Configurações do MyAnimeList";
             // 
-            // buttonValidarMAL
+            // buttonValidateMAL
             // 
-            this.buttonValidarMAL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonValidarMAL.Location = new System.Drawing.Point(177, 58);
-            this.buttonValidarMAL.Name = "buttonValidarMAL";
-            this.buttonValidarMAL.Size = new System.Drawing.Size(75, 23);
-            this.buttonValidarMAL.TabIndex = 4;
-            this.buttonValidarMAL.Text = "Validar usuário";
-            this.buttonValidarMAL.UseVisualStyleBackColor = true;
-            this.buttonValidarMAL.Click += new System.EventHandler(this.btnValidarMALUser_Click);
+            this.buttonValidateMAL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonValidateMAL.Location = new System.Drawing.Point(177, 58);
+            this.buttonValidateMAL.Name = "buttonValidateMAL";
+            this.buttonValidateMAL.Size = new System.Drawing.Size(75, 23);
+            this.buttonValidateMAL.TabIndex = 4;
+            this.buttonValidateMAL.Text = "Validar usuário";
+            this.buttonValidateMAL.UseVisualStyleBackColor = true;
+            this.buttonValidateMAL.Click += new System.EventHandler(this.buttonValidateMAL_Click);
             // 
-            // textBoxMALUsuario
+            // textBoxMALUser
             // 
-            this.textBoxMALUsuario.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxMALUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxMALUsuario.Location = new System.Drawing.Point(6, 32);
-            this.textBoxMALUsuario.MaxLength = 16;
-            this.textBoxMALUsuario.Name = "textBoxMALUsuario";
-            this.textBoxMALUsuario.Size = new System.Drawing.Size(246, 20);
-            this.textBoxMALUsuario.TabIndex = 1;
+            this.textBoxMALUser.Location = new System.Drawing.Point(6, 32);
+            this.textBoxMALUser.MaxLength = 16;
+            this.textBoxMALUser.Name = "textBoxMALUser";
+            this.textBoxMALUser.Size = new System.Drawing.Size(246, 20);
+            this.textBoxMALUser.TabIndex = 1;
             // 
-            // labelUsuarioMAL
+            // labelMALUser
             // 
-            this.labelUsuarioMAL.AutoSize = true;
-            this.labelUsuarioMAL.Location = new System.Drawing.Point(6, 16);
-            this.labelUsuarioMAL.Name = "labelUsuarioMAL";
-            this.labelUsuarioMAL.Size = new System.Drawing.Size(187, 13);
-            this.labelUsuarioMAL.TabIndex = 0;
-            this.labelUsuarioMAL.Text = "Seu nome de usuário no MyAnimeList:";
+            this.labelMALUser.AutoSize = true;
+            this.labelMALUser.Location = new System.Drawing.Point(6, 16);
+            this.labelMALUser.Name = "labelMALUser";
+            this.labelMALUser.Size = new System.Drawing.Size(187, 13);
+            this.labelMALUser.TabIndex = 0;
+            this.labelMALUser.Text = "Seu nome de usuário no MyAnimeList:";
             // 
             // FormMAL
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(282, 139);
-            this.Controls.Add(this.buttonLimpar);
-            this.Controls.Add(this.buttonFechar);
-            this.Controls.Add(this.groupBoxMAL);
+            this.Controls.Add(this.buttonReset);
+            this.Controls.Add(this.buttonClose);
+            this.Controls.Add(this.groupBoxMALUser);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -119,21 +119,21 @@
             this.Name = "FormMAL";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configurar MyAnimeList";
-            this.Load += new System.EventHandler(this.MALForm_Load);
-            this.groupBoxMAL.ResumeLayout(false);
-            this.groupBoxMAL.PerformLayout();
+            this.Load += new System.EventHandler(this.FormMAL_Load);
+            this.groupBoxMALUser.ResumeLayout(false);
+            this.groupBoxMALUser.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button buttonLimpar;
-        private System.Windows.Forms.Button buttonFechar;
-        private System.Windows.Forms.GroupBox groupBoxMAL;
-        private System.Windows.Forms.Button buttonValidarMAL;
-        private System.Windows.Forms.TextBox textBoxMALUsuario;
-        private System.Windows.Forms.Label labelUsuarioMAL;
+        private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.GroupBox groupBoxMALUser;
+        private System.Windows.Forms.Button buttonValidateMAL;
+        private System.Windows.Forms.TextBox textBoxMALUser;
+        private System.Windows.Forms.Label labelMALUser;
 
     }
 }

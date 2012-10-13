@@ -26,18 +26,18 @@ namespace MALTweet.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("dQM4PTXiLW2oMWyFfy9g")]
-        public string consumerKey {
+        public string ConsumerKey {
             get {
-                return ((string)(this["consumerKey"]));
+                return ((string)(this["ConsumerKey"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NIh9JnVqdl0eO0eby82hZYDPwSkQG5Cg0bmtcy4Z0E")]
-        public string consumerSecret {
+        public string ConsumerSecret {
             get {
-                return ((string)(this["consumerSecret"]));
+                return ((string)(this["ConsumerSecret"]));
             }
         }
         
