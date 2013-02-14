@@ -10,6 +10,7 @@ using System.Net;
 using System.Xml;
 using System.Text.RegularExpressions;
 using MALTweet.Properties;
+using System.Threading.Tasks;
 
 namespace MALTweet
 {
@@ -40,10 +41,13 @@ namespace MALTweet
                 labelTweetCounter.Enabled = true;
                 textBoxTweet.Enabled = true;
                 buttonSendTweet.Enabled = true;
+                buttonSendTweetPlus.Enabled = true;
                 numericUpDownCurrentEpisodes.Enabled = true;
                 textBoxTweet.BackColor = SystemColors.Window;
 
                 listViewMALUpdates.Items.Clear();
+
+                App.MALGetUpdates();
 
                 foreach (MALEntry entry in App.MALCurrentList)
                 {
@@ -63,6 +67,7 @@ namespace MALTweet
                 textBoxTweet.Enabled = false;
                 textBoxTweet.Text = String.Empty;
                 buttonSendTweet.Enabled = false;
+                buttonSendTweetPlus.Enabled = false;
                 numericUpDownCurrentEpisodes.Enabled = false;
                 numericUpDownCurrentEpisodes.Value = 0;
                 textBoxTweet.BackColor = SystemColors.Control;
@@ -71,7 +76,15 @@ namespace MALTweet
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            App = new MALTweet();
+            FormProgress fp = new FormProgress();
+
+            fp.RunAction((se, ev) =>
+            {
+                App = new MALTweet(fp);
+            });
+
+            if (fp.ShowDialog() == DialogResult.Cancel)
+                Close();
 
             UpdateStatus();
         }
@@ -102,7 +115,7 @@ namespace MALTweet
 
         private void buttonReloadMALUpdates_Click(object sender, EventArgs e)
         {
-            MALEntryList m = App.MALGetUpdates();
+            UpdateStatus();
         }
 
         private void listViewMALUpdates_SelectedIndexChanged(object sender, EventArgs e)
@@ -123,7 +136,7 @@ namespace MALTweet
             }
             else
             {
-                MALEntry entry = (MALEntry) listViewMALUpdates.SelectedItems[0].Tag;
+                MALEntry entry = (MALEntry)listViewMALUpdates.SelectedItems[0].Tag;
 
                 numericUpDownCurrentEpisodes.Maximum = entry.SeriesEpisodes;
                 numericUpDownCurrentEpisodes.Value = entry.MyWatchedEpisodes;
@@ -147,6 +160,12 @@ namespace MALTweet
                 MessageBox.Show("zica monstro, o tweet voltou.");
         }
 
+        private void buttonSendTweetPlus_Click(object sender, EventArgs e)
+        {
+            numericUpDownCurrentEpisodes.UpButton();
+            buttonSendTweet_Click(sender, e);
+        }
+
         private void textBoxTweet_TextChanged(object sender, EventArgs e)
         {
             labelTweetCounter.Text = String.Format(TWEET_COUNTER_LABEL, TWEET_COUNTER_LIMIT - textBoxTweet.TextLength);
@@ -156,13 +175,16 @@ namespace MALTweet
         {
             if (listViewMALUpdates.SelectedItems.Count != 0)
             {
-                MALEntry entry = (MALEntry) listViewMALUpdates.SelectedItems[0].Tag;
-                textBoxTweet.Text = ComposeTweet(entry, (int) numericUpDownCurrentEpisodes.Value);
+                MALEntry entry = (MALEntry)listViewMALUpdates.SelectedItems[0].Tag;
+                textBoxTweet.Text = ComposeTweet(entry, (int)numericUpDownCurrentEpisodes.Value);
             }
         }
 
         private string ComposeTweet(MALEntry entry, int watched)
         {
+            if (entry.MyStatus == 4)
+                return String.Format("Desisti de assistir a {0} (episódio {1}) - http://myanimelist.net/anime/{2} #MALTweet", entry.SeriesTitle, watched, entry.SeriesAnimedbId);
+
             if (watched == 0)
                 return String.Format("Comecei a assistir a {0} ({1} episódios) - http://myanimelist.net/anime/{2} #MALTweet", entry.SeriesTitle, entry.SeriesEpisodes, entry.SeriesAnimedbId);
 

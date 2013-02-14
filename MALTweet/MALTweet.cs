@@ -6,6 +6,8 @@ using System.Net;
 using TweetSharp;
 using System.Xml;
 using System.IO;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace MALTweet
 {
@@ -41,16 +43,25 @@ namespace MALTweet
 
         public MALEntryList MALCurrentList;
 
-        public MALTweet()
+        public MALTweet(FormProgress fp)
         {
+            fp.ReportProgress(18, "Carregando Configurações do MAL");
             LoadMALConfig();
+
+            fp.ReportProgress(18, "Validando configurações do MAL");
             ValidateMAL();
 
+            fp.ReportProgress(18, "Carregando Configurações do Twitter");
             LoadTwitterConfig();
+
+            fp.ReportProgress(18, "Validando configurações do Twitter");
             ValidateTwitter();
 
+            fp.ReportProgress(18, "Obtendo atualizações do MAL");
             if (Ready)
                 MALGetUpdates();
+
+            fp.ReportProgress(10, "Concluído");
         }
 
         public void ValidateMAL()
@@ -193,15 +204,15 @@ namespace MALTweet
                 MALCurrentList = GetCurrentMALList();
                 return MALEntryList.CreateEmpty();
             }
-
+            MALEntryList previousList = MALCurrentList;
             MALEntryList currentList = GetCurrentMALList();
 
-            return MALEntryList.CreateEmpty();
+            return MALEntryList.CreateFromDifference(previousList, currentList);
         }
 
         private MALEntryList GetCurrentMALList()
         {
-            return MALEntryList.CreateFromUsername(MALUser);
+            return MALEntryList.CreateFromUserName(MALUser);
         }
     }
 }

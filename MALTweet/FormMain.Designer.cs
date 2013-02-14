@@ -46,6 +46,7 @@
             this.listViewMALUpdates = new System.Windows.Forms.ListView();
             this.columnHeaderNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.buttonSendTweetPlus = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStatusMAL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStatusTwitter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCurrentEpisodes)).BeginInit();
@@ -223,6 +224,17 @@
             // 
             this.columnHeaderStatus.Text = "Status";
             // 
+            // buttonSendTweetPlus
+            // 
+            this.buttonSendTweetPlus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSendTweetPlus.Location = new System.Drawing.Point(505, 102);
+            this.buttonSendTweetPlus.Name = "buttonSendTweetPlus";
+            this.buttonSendTweetPlus.Size = new System.Drawing.Size(61, 23);
+            this.buttonSendTweetPlus.TabIndex = 15;
+            this.buttonSendTweetPlus.Text = "Enviar +1";
+            this.buttonSendTweetPlus.UseVisualStyleBackColor = true;
+            this.buttonSendTweetPlus.Click += new System.EventHandler(this.buttonSendTweetPlus_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -238,6 +250,7 @@
             this.Controls.Add(this.buttonConfigMAL);
             this.Controls.Add(this.buttonConfigTwitter);
             this.Controls.Add(this.buttonReloadMALUpdates);
+            this.Controls.Add(this.buttonSendTweetPlus);
             this.Controls.Add(this.buttonSendTweet);
             this.Controls.Add(this.textBoxTweet);
             this.Controls.Add(this.listViewMALUpdates);
@@ -273,6 +286,7 @@
         private System.Windows.Forms.ToolTip toolTipMain;
         private System.Windows.Forms.NumericUpDown numericUpDownCurrentEpisodes;
         private System.Windows.Forms.Label labelTotalEpisodes;
+        private System.Windows.Forms.Button buttonSendTweetPlus;
 
     }
 }

@@ -9,17 +9,14 @@ using System.IO;
 
 namespace MALTweet
 {
-    public class MALEntryList : IEnumerable<MALEntry>
+    public class MALEntryList : List<MALEntry>
     {
-        private List<MALEntry> _List;
-
         public const string MAL_REQUEST_URL = "http://myanimelist.net/malappinfo.php?u={0}&status=all&type=anime";
         public int LastUpdate { get; private set; }
 
         private MALEntryList()
         {
             LastUpdate = 0;
-            _List = new List<MALEntry>();
         }
 
         public static MALEntryList CreateEmpty()
@@ -27,7 +24,7 @@ namespace MALTweet
             return new MALEntryList();
         }
 
-        public static MALEntryList CreateFromUsername(string user)
+        public static MALEntryList CreateFromUserName(string user)
         {
             string url = String.Format(MAL_REQUEST_URL, user);
 
@@ -86,25 +83,13 @@ namespace MALTweet
 
         public void AddEntry(MALEntry entry)
         {
-            _List.Add(entry);
+            Add(entry);
             LastUpdate = Math.Max(LastUpdate, entry.MyLastUpdated);
         }
 
-        public void Sort()
+        public new void Sort()
         {
-            _List.Sort(new MALEntry.Comparer());
+            Sort(new MALEntry.Comparer());
         }
-
-        #region IEnumerable implementation (chaining from _List)
-        public IEnumerator<MALEntry> GetEnumerator()
-        {
-            return _List.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return _List.GetEnumerator();
-        }
-        #endregion
     }
 }
