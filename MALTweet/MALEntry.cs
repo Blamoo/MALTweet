@@ -19,6 +19,8 @@ namespace MALTweet
             }
         }
 
+        public bool Changed = false;
+
         public int SeriesAnimedbId;
         public string SeriesTitle;
         public string SeriesSynonyms;

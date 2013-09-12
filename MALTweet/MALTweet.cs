@@ -41,25 +41,35 @@ namespace MALTweet
 
         const string INVALID_TWITTER_TOKEN = "?";
 
-        public MALEntryList MALCurrentList;
+        private MALEntryList MALLatestList;
+        private MALEntryList MALFirstList;
 
         public MALTweet(FormProgress fp)
         {
-            fp.ReportProgress(18, "Carregando Configurações do MAL");
-            LoadMALConfig();
+            Task T1 = Task.Factory.StartNew(() =>
+            {
+                fp.ReportProgress(18, "Carregando Configurações do MAL");
+                LoadMALConfig();
 
-            fp.ReportProgress(18, "Validando configurações do MAL");
-            ValidateMAL();
+                fp.ReportProgress(18, "Validando configurações do MAL");
+                ValidateMAL();
+            });
 
-            fp.ReportProgress(18, "Carregando Configurações do Twitter");
-            LoadTwitterConfig();
+            Task T2 = Task.Factory.StartNew(() =>
+            {
+                fp.ReportProgress(18, "Carregando Configurações do Twitter");
+                LoadTwitterConfig();
 
-            fp.ReportProgress(18, "Validando configurações do Twitter");
-            ValidateTwitter();
+                fp.ReportProgress(18, "Validando configurações do Twitter");
+                ValidateTwitter();
+            });
+
+            Task.WaitAll(T1, T2);
 
             fp.ReportProgress(18, "Obtendo atualizações do MAL");
+
             if (Ready)
-                MALGetUpdates();
+                MALFirstList = GetCurrentMALList();
 
             fp.ReportProgress(10, "Concluído");
         }
@@ -144,9 +154,9 @@ namespace MALTweet
             return true;
         }
 
-        internal bool SendTweet(string tweet)
+        internal bool SendTweet(string text)
         {
-            TwitterStatus s = TwitterService.SendTweet(new SendTweetOptions() { Status = tweet });
+            TwitterStatus s = TwitterService.SendTweet(new SendTweetOptions() { Status = text });
 
             if (s.Id == 0)
                 return false;
@@ -200,15 +210,10 @@ namespace MALTweet
 
         public MALEntryList MALGetUpdates()
         {
-            if (MALCurrentList == null)
-            {
-                MALCurrentList = GetCurrentMALList();
-                return MALEntryList.CreateEmpty();
-            }
-            MALEntryList previousList = MALCurrentList;
-            MALEntryList currentList = GetCurrentMALList();
+            if (MALLatestList == null)
+                return MALLatestList = MALFirstList;
 
-            return MALEntryList.CreateFromDifference(previousList, currentList);
+            return MALEntryList.CreateDiff(MALFirstList, GetCurrentMALList());
         }
 
         private MALEntryList GetCurrentMALList()

@@ -68,14 +68,15 @@ namespace MALTweet
             return ret;
         }
 
-        public static MALEntryList CreateFromDifference(MALEntryList previous, MALEntryList current)
+        public static MALEntryList CreateDiff(MALEntryList previous, MALEntryList current)
         {
             MALEntryList ret = MALEntryList.CreateEmpty();
 
             foreach (MALEntry entry in current)
             {
-                if (entry.MyLastUpdated >= previous.LastUpdate)
-                    ret.AddEntry(entry);
+                ret.Add(entry);
+                if (entry.MyLastUpdated > previous.LastUpdate)
+                    entry.Changed = true;
             }
 
             return ret;

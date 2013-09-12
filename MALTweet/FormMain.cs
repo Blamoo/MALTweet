@@ -27,7 +27,7 @@ namespace MALTweet
             InitializeComponent();
         }
 
-        private void UpdateStatus()
+        private void UpdateForm()
         {
             pictureBoxStatusMAL.Image = App.MALIsReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
             pictureBoxStatusTwitter.Image = App.TwitterIsReady ? Properties.Resources.YesIcon : Properties.Resources.NoIcon;
@@ -45,13 +45,26 @@ namespace MALTweet
                 numericUpDownCurrentEpisodes.Enabled = true;
                 textBoxTweet.BackColor = SystemColors.Window;
 
+                MALEntryList lista = App.MALGetUpdates();
+
                 listViewMALUpdates.Items.Clear();
 
-                App.MALGetUpdates();
+                long ontem = YesterdayUnixTimestamp();
 
-                foreach (MALEntry entry in App.MALCurrentList)
+                foreach (MALEntry entry in lista)
                 {
-                    listViewMALUpdates.Items.Add(new ListViewItem(new string[] { entry.SeriesTitle, String.Format("{0}/{1}", entry.MyWatchedEpisodes, entry.SeriesEpisodes) }) { Tag = entry });
+                    ListViewItem i = new ListViewItem(new string[] { entry.SeriesTitle, String.Format("{0}/{1}", entry.MyWatchedEpisodes, entry.SeriesEpisodes) });
+
+                    i.Tag = entry;
+
+                    if (entry.Changed)
+                        i.BackColor = Color.Salmon;
+                    else if (entry.MyLastUpdated >= ontem)
+                        i.BackColor = Color.Wheat;
+                    else
+                        i.BackColor = SystemColors.Control;
+
+                    listViewMALUpdates.Items.Add(i);
                 }
 
                 listViewMALUpdates_SelectedIndexChanged(this, EventArgs.Empty);
@@ -74,6 +87,12 @@ namespace MALTweet
             }
         }
 
+        private long YesterdayUnixTimestamp()
+        {
+            long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
+            return (ticks / 10000000) - (60 * 60 * 24);
+        }
+
         private void FormMain_Load(object sender, EventArgs e)
         {
             FormProgress fp = new FormProgress();
@@ -86,7 +105,7 @@ namespace MALTweet
             if (fp.ShowDialog() == DialogResult.Cancel)
                 Close();
 
-            UpdateStatus();
+            UpdateForm();
         }
 
         private void buttonbuttonResetConfig_Click(object sender, EventArgs e)
@@ -94,7 +113,7 @@ namespace MALTweet
             App.ResetTwitter();
             App.ResetMAL();
 
-            UpdateStatus();
+            UpdateForm();
         }
 
         private void buttonConfigTwitter_Click(object sender, EventArgs e)
@@ -102,7 +121,7 @@ namespace MALTweet
             FormTwitter f = new FormTwitter(App);
 
             if (f.ShowDialog(this) == DialogResult.OK)
-                UpdateStatus();
+                UpdateForm();
         }
 
         private void buttonConfigMAL_Click(object sender, EventArgs e)
@@ -110,12 +129,12 @@ namespace MALTweet
             FormMAL f = new FormMAL(App);
 
             if (f.ShowDialog(this) == DialogResult.OK)
-                UpdateStatus();
+                UpdateForm();
         }
 
         private void buttonReloadMALUpdates_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateForm();
         }
 
         private void listViewMALUpdates_SelectedIndexChanged(object sender, EventArgs e)
