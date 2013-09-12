@@ -102,8 +102,9 @@ namespace MALTweet
         public void ValidateTwitter()
         {
             TwitterService.AuthenticateWith(TwitterAccessToken, TwitterAccessTokenSecret);
+            GetUserProfileOptions u = new GetUserProfileOptions();
 
-            TwitterUser user = TwitterService.GetUserProfile();
+            TwitterUser user = TwitterService.GetUserProfile(u);
 
             if (user == null)
             {
@@ -145,7 +146,7 @@ namespace MALTweet
 
         internal bool SendTweet(string tweet)
         {
-            TwitterStatus s = TwitterService.SendTweet(tweet);
+            TwitterStatus s = TwitterService.SendTweet(new SendTweetOptions() { Status = tweet });
 
             if (s.Id == 0)
                 return false;
