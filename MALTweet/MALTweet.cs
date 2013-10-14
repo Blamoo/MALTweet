@@ -68,7 +68,7 @@ namespace MALTweet
 
             fp.ReportProgress(18, "Obtendo atualizações do MAL");
 
-            if (Ready)
+            if (Ready && MALFirstList == null)
                 MALFirstList = GetCurrentMALList();
 
             fp.ReportProgress(10, "Concluído");
@@ -76,12 +76,7 @@ namespace MALTweet
 
         public void ValidateMAL()
         {
-            string urlMAL = String.Format("http://myanimelist.net/malappinfo.php?u={0}&status=all&type=anime", MALUser);
-
-            WebRequest request = WebRequest.Create(urlMAL);
-            WebResponse response = request.GetResponse();
-            XmlDocument document = new XmlDocument();
-            document.Load(response.GetResponseStream());
+            XmlDocument document = MALEntryList.GetXmlDocument(MALUser);
 
             XmlElement errorNode = document["myanimelist"]["error"];
 
@@ -99,8 +94,8 @@ namespace MALTweet
             {
                 MALIsReady = true;
                 MALUser = document["myanimelist"]["myinfo"]["user_name"].InnerText;
+                MALFirstList = MALEntryList.CreateFromXmlDocument(document);
             }
-            response.Close();
         }
 
         public void SetTestMALUser(string malUser)
@@ -218,7 +213,7 @@ namespace MALTweet
 
         private MALEntryList GetCurrentMALList()
         {
-            return MALEntryList.CreateFromUserName(MALUser);
+            return MALEntryList.CreateFromUser(MALUser);
         }
     }
 }

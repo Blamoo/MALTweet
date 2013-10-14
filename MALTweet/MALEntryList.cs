@@ -24,30 +24,26 @@ namespace MALTweet
             return new MALEntryList();
         }
 
-        public static MALEntryList CreateFromUserName(string user)
+        public static XmlDocument GetXmlDocument(string user)
         {
             string url = String.Format(MAL_REQUEST_URL, user);
 
-            WebRequest request = WebRequest.Create(url);
-            WebResponse response = request.GetResponse();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-            return CreateFromStream(response.GetResponseStream());
+            using (Stream stream = request.GetResponse().GetResponseStream())
+            using (StreamReader r = new StreamReader(stream))
+            {
+                XmlDocument ret = new XmlDocument();
+                ret.Load(r);
+
+                return ret;
+            }
         }
 
-        public static MALEntryList CreateFromTextFile(string listData)
+        public static MALEntryList CreateFromUser(string user)
         {
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(listData);
-
-            return CreateFromXmlDocument(document);
-        }
-
-        public static MALEntryList CreateFromStream(Stream stream)
-        {
-            XmlDocument document = new XmlDocument();
-            document.Load(stream);
-
-            return CreateFromXmlDocument(document);
+            return CreateFromXmlDocument(GetXmlDocument(user));
         }
 
         public static MALEntryList CreateFromXmlDocument(XmlDocument document)
